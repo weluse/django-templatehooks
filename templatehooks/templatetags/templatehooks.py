@@ -34,10 +34,10 @@ class TemplateHookNode(template.Node):
         content = registry.get_content(self.name, context)
 
         if self.as_var:
-            context[self.as_var] = rendered_content
+            context[self.as_var] = content
             return ''
 
-        return rendered_content
+        return content
 
 
 # pylint: disable-msg=W0613
