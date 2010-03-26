@@ -45,6 +45,7 @@ class HookRegistry(object):
         Connect a function ``fn`` to the template hook ``name``.
 
         An example hook could look like this::
+
             function my_hook(sender, **kwargs):
                 # Get the request from context
                 request = sender['request']

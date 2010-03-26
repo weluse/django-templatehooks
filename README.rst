@@ -29,6 +29,13 @@ Afterwards, create a hook inside any template.
       {% hook header_end %}
    ...
 
+Every hook must be registered once. This is done via the ``registry.register``
+method::
+
+   from templatehooks.registry import registry
+
+   registry.register('header_end')
+
 Connect to the hook inside a pluggable app. The ``models.py`` is usually a good
 place for this, because it's dynamically imported if the app is enabled. It's
 also the preferred place for signal bindings and `django-templatehooks` utilizes

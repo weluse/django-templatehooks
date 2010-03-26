@@ -28,7 +28,7 @@ class TemplateHookNode(template.Node):
 
     def render(self, context):
         """
-        Fires the given signal and renders the list values in response.
+        Fires the given signal and renders the list values in return.
         """
 
         content = registry.get_content(self.name, context)
@@ -44,24 +44,15 @@ class TemplateHookNode(template.Node):
 @register.tag(name="hook")
 def do_template_hook(parser, token):
     """
-    Extends your templates easily with pluggable apps.
-
     Example use::
         {% hook {signal_name} %}
         or
         {% hook {signal_name} as {context_var} %}
 
-    The signal must be defined, currently inside this module's models.
+    The signal must be registered with the templatehooks registry::
 
-    To use a template hook you connect to the signal and modify the signal's
-    content variable::
-
-        from templatetags.models import my_hook_name
-
-        def extend_hook(signal, **kwargs):
-            kwargs['content'].append("Hello World!")
-
-        my_hook_name.connect(extend_hook)
+        >>> from templatehooks.registry import registry
+        >>> registry.register('signal_name')
     """
 
     bits = token.split_contents()
