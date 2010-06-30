@@ -29,7 +29,7 @@ setup(
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
         "Programming Language :: Python :: 2.6",
-        "Topic :: Software Development :: Templating",
+        "Framework :: Django",
         "Topic :: Software Development :: Libraries :: Python Modules"
     ],
     zip_safe=False
