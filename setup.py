@@ -5,6 +5,9 @@ Django Template Hooks
 
 Provides template hooks to provide an easy interface for pluggable apps to
 extend your templates.
+
+:copyright: 2010, Pascal Hartig <phartig@weluse.de>
+:license: BSD, see LICENSE for more details
 """
 
 try:
@@ -14,14 +17,21 @@ except ImportError:
 
 setup(
     name='django-templatehooks',
-    version='0.1.1',
+    version='0.2',
     author='Pascal Hartig',
     author_email='phartig@weluse.de',
     packages=['templatehooks', 'templatehooks.templatetags'],
     url='http://github.com/weluse/django-templatetags',
-    license='MIT',
+    license='BSD',
     description='Template hooks for django',
     long_description=__doc__,
+    classifiers=[
+        "Development Status :: 4 - Beta",
+        "Intended Audience :: Developers",
+        "Programming Language :: Python :: 2.6",
+        "Topic :: Software Development :: Templating",
+        "Topic :: Software Development :: Libraries :: Python Modules"
+    ],
     zip_safe=False
     # test_suite='still to be written'
 )
