@@ -13,7 +13,7 @@ From PyPi::
 
 From Git::
 
-   pip install -r git://github.com/weluse/django-templatehooks
+   pip install -e git://github.com/weluse/django-templatehooks#egg=templatehooks
 
 Usage
 -----
@@ -27,6 +27,7 @@ Afterwards, create a hook inside any template.
    <div id="header">
       <h1>Welcome!</h1>
       {% hook header_end %}
+   </div>
    ...
 
 Every hook must be registered once. This is done via the ``registry.register``
