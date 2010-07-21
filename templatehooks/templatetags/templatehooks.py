@@ -64,7 +64,7 @@ def do_template_hook(parser, token):
         name = bits[1]
         as_var = bits[3]
     else:
-        raise template.TemplateSyntaxErrors("{0} takes either two or four "
-            "arguments: {% hook {signal_name} [as {context_var}] %}")
+        raise template.TemplateSyntaxErrors("%s takes either two or four "
+            "arguments: {% hook {signal_name} [as {context_var}] %}" % bits[0])
 
     return TemplateHookNode(name, as_var)
