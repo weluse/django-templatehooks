@@ -12,3 +12,4 @@ class TemplateHooksEnabledTestCase(TestCase):
         response = self.client.get('/')
         self.assertTemplateUsed(response, "example/_sidebar_entry.html")
         self.assertContains(response, u"Hello templatehooks!")
+        self.assertContains(response, u"Hello from decorator!")
