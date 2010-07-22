@@ -48,11 +48,28 @@ django's signal infrastructure.
 
 
    def _connect_level2_heading(sender, **kwargs):
-      """Adds a second heading at the end of the header box."""
-      kwargs['content'].append("<h2>I'm dynamically added</h2>")
+       """Adds a second heading at the end of the header box."""
+       kwargs['content'].append(u"<h2>I'm dynamically added</h2>")
 
 
    registry.connect('header_end', _connect_level2_heading)
 
 That's it. The sender parameter is an instance of the template's context, so you
 can look up the request there, if a ``RequestContext`` was used.
+
+Decorators
+~~~~~~~~~~
+
+.. versionadded:: 0.3
+
+An easier approach is to use the decorator syntax which combines all of the
+above code into this little snippet::
+
+   from templatehooks.decorators import hook
+
+   @hook('header_end')
+   def render_level2_heading(request):
+       return u"<h2>I'm dynamically added</h2>"
+
+Please note, that the request parameter is always provided, but might be `None`
+if no ``RequestContext`` instance was used to render the base template.
