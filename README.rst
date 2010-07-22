@@ -18,11 +18,13 @@ From Git::
 Usage
 -----
 
-Add ``django-templatehooks`` to ``INSTALLED_APPS``.
-Afterwards, create a hook inside any template.
+Add ``templatehooks`` to ``INSTALLED_APPS``.
+Afterwards you can create hooks inside any template you would like to extend
+from other apps.
 
 ``base.html``::
 
+   {% load templatehooks %}
    ...
    <div id="header">
       <h1>Welcome!</h1>
@@ -71,5 +73,5 @@ above code into this little snippet::
    def render_level2_heading(request):
        return u"<h2>I'm dynamically added</h2>"
 
-Please note, that the request parameter is always provided, but might be `None`
+Please note that the request parameter is always provided, but might be `None`
 if no ``RequestContext`` instance was used to render the base template.
