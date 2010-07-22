@@ -1,0 +1,18 @@
+{% load templatehooks %}
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+    <div class=header>
+        <h1>Hello, World</h1>
+        {% hook header_end %}
+    </div>
+    <section class=body>
+        <h2>My Body</h2>
+        <aside class=sidebar>
+            <ul>
+                {% hook sidebar_start %}
+                <li>My Entry</li>
+            </ul>
+        </aside>
+    </section>
+</html>
