@@ -33,5 +33,4 @@ setup(
         "Topic :: Software Development :: Libraries :: Python Modules"
     ],
     zip_safe=False
-    # test_suite='still to be written'
 )
