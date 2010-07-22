@@ -1,5 +1,6 @@
 from django.template.loader import render_to_string
 from django.template import RequestContext
+from templatehooks.decorators import hook
 
 
 def _render_sidebar_entry(request):

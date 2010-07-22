@@ -7,7 +7,7 @@ Registry for template hook signals.
 
 :copyright: 2010, weluse (http://weluse.de)
 :author: Pascal Hartig <phartig@weluse.de>
-:license: 2010
+:license: BSD
 """
 
 from django.dispatch.dispatcher import Signal
