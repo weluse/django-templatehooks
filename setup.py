@@ -15,13 +15,14 @@ try:
 except ImportError:
     from distutils.core import setup
 
+
 setup(
     name='django-templatehooks',
-    version='0.3',
+    version='0.3.1',
     author='Pascal Hartig',
     author_email='phartig@weluse.de',
     packages=['templatehooks', 'templatehooks.templatetags'],
-    url='http://github.com/weluse/django-templatetags',
+    url='http://github.com/weluse/django-templatehooks',
     license='BSD',
     description='Template hooks for django',
     long_description=__doc__,
