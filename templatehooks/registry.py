@@ -36,7 +36,7 @@ class HookRegistry(object):
                 raise TypeError("Signal {0} does not provide a 'content' "
                     "parameter!".format(name))
         else:
-            signal = Signal(providing_args=['content'])
+            signal = Signal(providing_args=['content', 'context'])
 
         self._registry[name] = signal
 
@@ -48,7 +48,7 @@ class HookRegistry(object):
 
             function my_hook(sender, **kwargs):
                 # Get the request from context
-                request = sender['request']
+                request = kwargs['context']['request']
                 kwargs['content'].append("Hello, {0}!".format(request.user))
         """
 
@@ -63,9 +63,9 @@ class HookRegistry(object):
 
         signal = self._registry[name]
         content = []
-        signal.send(sender=context, content=content)
+        signal.send(sender=self, context=context, content=content)
 
-        return '\n'.join(content)
+        return u'\n'.join(content)
 
 
 registry = HookRegistry()
