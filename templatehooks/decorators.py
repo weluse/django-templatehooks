@@ -21,7 +21,7 @@ def hook(name):
     Example::
 
         @hook('header_end')
-        def my_hook(request):
+        def my_hook(context):
             return u"Hello, World!"
     """
 
@@ -29,8 +29,8 @@ def hook(name):
 
         @wraps(func)
         def _inner(sender, **kwargs):
-            request = sender.get('request', None)
-            kwargs['content'].append(func(request))
+            context = kwargs.get('context', None)
+            kwargs['content'].append(func(context))
             return func
 
         registry.connect(name, _inner)

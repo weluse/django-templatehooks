@@ -10,6 +10,7 @@ Registry for template hook signals.
 :license: BSD
 """
 
+import warnings
 from django.dispatch.dispatcher import Signal
 
 
@@ -36,11 +37,11 @@ class HookRegistry(object):
                 raise TypeError("Signal {0} does not provide a 'content' "
                     "parameter!".format(name))
         else:
-            signal = Signal(providing_args=['content'])
+            signal = Signal(providing_args=['content', 'context'])
 
         self._registry[name] = signal
 
-    def connect(self, name, fn):
+    def connect(self, name, fn, fail_silently=True):
         """
         Connect a function ``fn`` to the template hook ``name``.
 
@@ -48,11 +49,28 @@ class HookRegistry(object):
 
             function my_hook(sender, **kwargs):
                 # Get the request from context
-                request = sender['request']
+                request = kwargs['context']['request']
                 kwargs['content'].append("Hello, {0}!".format(request.user))
+
+            registry.connect('hookname', name)
+
+        The optional ``fail_silently`` parameter controls the behavior
+        triggered when a function is connected to an unknown hook. New default
+        behavior is to issue a warning. If ``fail_silently`` is False a
+        RuntimeError is raised instead.
         """
 
-        signal = self._registry[name]
+        try:
+            signal = self._registry[name]
+        except KeyError:
+            message = ("The template hook '%s' must be "
+                       "registered before you can connect to it." % name)
+            if fail_silently:
+                warnings.warn(message, RuntimeWarning)
+            else:
+                raise RuntimeError(message)
+            return
+
         signal.connect(fn)
 
     def get_content(self, name, context):
@@ -63,9 +81,9 @@ class HookRegistry(object):
 
         signal = self._registry[name]
         content = []
-        signal.send(sender=context, content=content)
+        signal.send(sender=self, context=context, content=content)
 
-        return '\n'.join(content)
+        return u'\n'.join(content)
 
 
 registry = HookRegistry()

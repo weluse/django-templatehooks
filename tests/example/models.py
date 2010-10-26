@@ -8,10 +8,12 @@ def _connect_level_heading(sender, **kwargs):
 
 
 def _connect_sidebar_entry(sender, **kwargs):
-    kwargs['content'].append(_render_sidebar_entry(sender['request']))
+    request = kwargs['context']['request']
+    kwargs['content'].append(_render_sidebar_entry(request))
+
 
 @hook('header_end')
-def _render_second_heading(request):
+def _render_second_heading(context):
     return u"<p>Hello from decorator!</p>"
 
 
