@@ -18,7 +18,7 @@ except ImportError:
 
 setup(
     name='django-templatehooks',
-    version='0.3.1',
+    version='0.4',
     author='Pascal Hartig',
     author_email='phartig@weluse.de',
     packages=['templatehooks', 'templatehooks.templatetags'],
