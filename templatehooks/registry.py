@@ -10,6 +10,7 @@ Registry for template hook signals.
 :license: BSD
 """
 
+import warnings
 from django.dispatch.dispatcher import Signal
 
 
@@ -40,7 +41,7 @@ class HookRegistry(object):
 
         self._registry[name] = signal
 
-    def connect(self, name, fn):
+    def connect(self, name, fn, fail_silently=True):
         """
         Connect a function ``fn`` to the template hook ``name``.
 
@@ -50,9 +51,26 @@ class HookRegistry(object):
                 # Get the request from context
                 request = kwargs['context']['request']
                 kwargs['content'].append("Hello, {0}!".format(request.user))
+
+            registry.connect('hookname', name)
+
+        The optional ``fail_silently`` parameter controls the behavior
+        triggered when a function is connected to an unknown hook. New default
+        behavior is to issue a warning. If ``fail_silently`` is False a
+        RuntimeError is raised instead.
         """
 
-        signal = self._registry[name]
+        try:
+            signal = self._registry[name]
+        except KeyError:
+            message = ("The template hook '%s' must be "
+                       "registered before you can connect to it." % name)
+            if fail_silently:
+                warnings.warn(message, RuntimeWarning)
+            else:
+                raise RuntimeError(message)
+            return
+
         signal.connect(fn)
 
     def get_content(self, name, context):
