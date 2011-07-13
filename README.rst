@@ -61,6 +61,7 @@ context variables or the request object, a ``context`` instance is provided with
 the ``kwargs``.
 
 ::
+
    from templatehooks.registry import registry
 
 
