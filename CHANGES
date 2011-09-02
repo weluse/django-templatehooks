@@ -1,0 +1,13 @@
+ChangeLog
+=========
+
+django-templatehooks v0.5
+-------------------------
+
+Registering hooks manually is no longer required. The previous behavior caused
+more problems than it solved, because you had to strictly control the import
+order to get it to work. There is theoretically backwards-incompatible, because
+your manual register() calls might override existing hook bindings. In reality
+this is a non-issue because in this order the bindings would not have worked in
+the first place. For more details, consult the `README
+<https://github.com/weluse/django-templatehooks/blob/master/README.rst>`_.
