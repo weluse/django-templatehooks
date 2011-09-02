@@ -16,21 +16,33 @@ class TemplateHooksEnabledTestCase(TestCase):
         self.assertContains(response, u"Hello templatehooks!")
         self.assertContains(response, u"Hello from decorator!")
 
-    def test_silent_failing(self):
-        """Test 'silent' failing."""
-
-        hookfn = lambda x, y: ''
+    def test_get_content_warning(self):
+        """Test requesting content from a non-existent hook."""
 
         with warnings.catch_warnings(record=True) as warn:
-            registry.connect('doesnotexist', hookfn, fail_silently=True)
+            registry.get_content('doesnotexist', {})
             assert len(warn) == 1
             assert issubclass(warn[-1].category, RuntimeWarning)
 
-    def test_loud_failing(self):
-        """Expect an Exception when fail_silently == False"""
+    def test_get_no_content_warning(self):
+        """Test requesting content from an existent hook."""
 
-        hookfn = lambda x, y: ''
+        registry.register('doesexist')
 
-        self.assertRaises(RuntimeError,
-                          lambda: registry.connect('doesnotexist', hookfn,
-                                                   fail_silently=False))
+        with warnings.catch_warnings(record=True) as warn:
+            registry.get_content('doesexist', {})
+            assert len(warn) == 0
+
+    def test_implicit_registration(self):
+        """Register a hook implicitly."""
+
+        mycontext = {}
+        result = u"I am Dave! Yognaught."
+
+        def _myhook(sender, **kwargs):
+            context = kwargs.get('context')
+            assert id(mycontext) == id(context)
+            kwargs['content'].append(result)
+
+        registry.connect('myhook', _myhook)
+        self.assertEquals(result, registry.get_content('myhook', mycontext))

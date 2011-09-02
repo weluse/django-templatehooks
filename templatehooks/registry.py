@@ -11,7 +11,12 @@ Registry for template hook signals.
 """
 
 import warnings
+import threading
 from django.dispatch.dispatcher import Signal
+
+
+# Lock used to control dynamic signal creation.
+_registry_lock = threading.Lock()
 
 
 class HookRegistry(object):
@@ -40,8 +45,9 @@ class HookRegistry(object):
             signal = Signal(providing_args=['content', 'context'])
 
         self._registry[name] = signal
+        return signal
 
-    def connect(self, name, fn, fail_silently=True):
+    def connect(self, name, fn):
         """
         Connect a function ``fn`` to the template hook ``name``.
 
@@ -54,22 +60,15 @@ class HookRegistry(object):
 
             registry.connect('hookname', name)
 
-        The optional ``fail_silently`` parameter controls the behavior
-        triggered when a function is connected to an unknown hook. New default
-        behavior is to issue a warning. If ``fail_silently`` is False a
-        RuntimeError is raised instead.
+        If the given hook name does not exist at runtime, it is created
+        dynamically.
         """
 
-        try:
-            signal = self._registry[name]
-        except KeyError:
-            message = ("The template hook '%s' must be "
-                       "registered before you can connect to it." % name)
-            if fail_silently:
-                warnings.warn(message, RuntimeWarning)
-            else:
-                raise RuntimeError(message)
-            return
+        with _registry_lock:
+            try:
+                signal = self._registry[name]
+            except KeyError:
+                signal = self.register(name)
 
         signal.connect(fn)
 
@@ -77,9 +76,19 @@ class HookRegistry(object):
         """
         Get the content of a template hook. Used internally by the hook
         templatetag.
+
+        If the referenced hook name has not been manually registered and there
+        are no hooks attached to it, a warning is issued.
         """
 
-        signal = self._registry[name]
+        try:
+            signal = self._registry[name]
+        except KeyError:
+            message = ("There are no connected functions for the hook '%s'." %
+                       name)
+            warnings.warn(message, RuntimeWarning)
+            return u''
+
         content = []
         signal.send(sender=self, context=context, content=content)
 
