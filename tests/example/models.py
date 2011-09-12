@@ -17,5 +17,10 @@ def _render_second_heading(context):
     return u"<p>Hello from decorator!</p>"
 
 
+@hook('header_end', 'sidebar_start')
+def _render_multiple_hooks(context):
+    return u"<p>Multiple hooks via decorator.</p>"
+
+
 registry.connect('header_end', _connect_level_heading)
 registry.connect('sidebar_start', _connect_sidebar_entry)

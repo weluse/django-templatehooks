@@ -14,7 +14,7 @@ from functools import wraps
 from templatehooks.registry import registry
 
 
-def hook(name):
+def hook(*names):
     """
     Decorator for creating a templatehooks.
 
@@ -23,6 +23,12 @@ def hook(name):
         @hook('header_end')
         def my_hook(context):
             return u"Hello, World!"
+
+    Example for multiple hooks::
+
+        @hook('header_end', 'footer_start')
+        def my_hook2(context):
+            return u"<h2>My dynamic level-2-heading</h2>
     """
 
     def _outer(func):
@@ -33,7 +39,9 @@ def hook(name):
             kwargs['content'].append(func(context))
             return func
 
-        registry.connect(name, _inner)
+        for name in names:
+            registry.connect(name, _inner)
+
         return _inner
 
     return _outer

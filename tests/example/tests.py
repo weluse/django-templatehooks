@@ -16,6 +16,12 @@ class TemplateHooksEnabledTestCase(TestCase):
         self.assertContains(response, u"Hello templatehooks!")
         self.assertContains(response, u"Hello from decorator!")
 
+    def test_multiple_hooks(self):
+        """Hook multiple endpoints with one decorator."""
+
+        response = self.client.get('/')
+        self.assertEquals(2, response.content.count("Multiple hooks"))
+
     def test_get_content_warning(self):
         """Test requesting content from a non-existent hook."""
 
