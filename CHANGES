@@ -1,6 +1,13 @@
 ChangeLog
 =========
 
+django-templatehooks v0.5.1
+---------------------------
+
+Allow multiple endpoints to be specified via the ``@hook`` decorator. For more
+details, see the `README
+<https://github.com/weluse/django-templatehooks/blob/master/README.rst>`_.
+
 django-templatehooks v0.5
 -------------------------
 
