@@ -56,6 +56,16 @@ That's it. As you can see, you get the current template context object as first
 parameter to your hook function. In order to access the request object, a
 ``RequestContext`` must be used to render the template containing the hook.
 
+If you have multiple endpoints you want to attach your hook to, you can pass
+multiple names to the ``@hook`` decorator::
+
+   from templatehooks.decorators import hook
+
+   @hook('header_end', 'footer_start')
+   def render_level2_heading(context):
+       return render_to_string("_hook.html", context['user'])
+
+
 Low level connect
 ~~~~~~~~~~~~~~~~~
 
